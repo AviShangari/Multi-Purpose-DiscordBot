@@ -6,6 +6,7 @@ import webbrowser
 import AutomatedSchedule
 from discord.ext import commands
 import YoutubeMusicPlayer
+import AudioManager
 
 
 bot = commands.Bot(command_prefix="-")
@@ -42,25 +43,25 @@ async def run(ctx, name):
     with open("discord_app_paths.json") as json_file:
         data = json.load(json_file)
     subprocess.call(data[name])
-    await ctx.send("Opening " + name + "...")
+    await ctx.send("```Opening " + name + "...```")
 
 
 @bot.command()
 async def study(ctx):
     webbrowser.open("https://learn.ontariotechu.ca/")
-    await ctx.send("Opening study tabs...")
+    await ctx.send("```Opening study tabs...```")
 
 
 @bot.command()
 async def watch(ctx, name):
     if name == "netflix":
-        webbrowser.open("https://www.netflix.com/browse")
+        webbrowser.open("```https://www.netflix.com/browse```")
         await ctx.send("Opening Netflix...")
     elif name == "youtube":
         webbrowser.open("www.youtube.com")
-        await ctx.send("Opening Youtube...")
+        await ctx.send("```Opening Youtube...```")
     else:
-        await ctx.send("Invalid Selection!")
+        await ctx.send("```Invalid Selection!```")
 
 
 @bot.command()
@@ -91,7 +92,7 @@ async def resume(ctx):
 
 
 @bot.command()
-async def repeat(ctx, word):
+async def repeat(ctx, word: str):
     if word.lower() == 'song':
         YoutubeMusicPlayer.repeat('song')
         await ctx.send('```Repeating current song```')
@@ -101,6 +102,11 @@ async def repeat(ctx, word):
     else:
         await ctx.send('```You have entered an incorrect command. Please try again.```')
 
+
+@bot.command()
+async def volume(ctx, vol: float):
+    await ctx.send("```Setting volume to: " + str(vol) + "```")
+    AudioManager.set_volume(vol)
 
 YoutubeMusicPlayer.log_in()
 AutomatedSchedule.log_in()
